@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 export default function Navbar() {
-    const { accessToken,resetAccessToken } = useContext(AppContext);
+    const { accessToken,user,resetAccessToken } = useContext(AppContext);
     const navigate = useNavigate()
 
 
@@ -20,6 +20,10 @@ export default function Navbar() {
 
     const myBookings = () => {
         navigate('/mybookings')
+    }
+
+    const manageFlights = () => {
+        navigate('/flight')
     }
 
     return (
@@ -35,8 +39,9 @@ export default function Navbar() {
                         <Link to={'/'} style={{textDecoration:'none',color:'white'}}>Fligh Booking</Link>
                     </Typography>
                     <Box sx={{display:'flex',columnGap:'10px'}}>
+                        {user.isAdmin && <Button variant='contained' sx={{ color: 'white' }} onClick={manageFlights}>Manage Flights</Button>}
+                        {!!accessToken && !user.isAdmin && <Button variant='contained' sx={{ color: 'white' }} onClick={myBookings}>MyBookings</Button>}   
                         {!!accessToken && <Button variant='contained' sx={{ color: 'white' }} onClick={logout}>Logout</Button>}
-                        {!!accessToken && <Button variant='contained' sx={{ color: 'white' }} onClick={myBookings}>MyBookings</Button>}   
                     </Box>
                 </Toolbar>
             </AppBar>

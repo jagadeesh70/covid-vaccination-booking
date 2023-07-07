@@ -6,16 +6,34 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup: React.FC = () => {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate()
+
+
+    const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
             email: data.get('email'),
-            password: data.get('password'),
-        });
+           password: data.get('password'),
+           confirmPassword:data.get('confirmPassword'),
+           name:data.get('name')
+       })
+        try {
+            const response = await axios.post('http://localhost:3000/auth/register',{
+                email: data.get('email'),
+                password: data.get('password'),
+                confirmPassword:data.get('confirmPassword'),
+                name:data.get('name')
+            })
+            
+            navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
     };
 
 
@@ -65,7 +83,7 @@ const Signup: React.FC = () => {
                     margin="normal"
                     required
                     fullWidth
-                    name="confirm password"
+                    name="confirmPassword"
                     label="Confirm Password"
                     type="password"
                     id="confirm-password"
